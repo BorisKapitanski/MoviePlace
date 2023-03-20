@@ -18,9 +18,11 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [movie, setMovie] = useState({});
   const [formError, setFormError] = useState("");
+  const [user , setUser] = useState('');
+
+  
   
   const navigate = useNavigate();
-  
   useEffect(() => {
     services.get(baseUrl)
     .then(response=> Object.values(response))
@@ -102,6 +104,7 @@ function App() {
       if(response.ok || response.status === 204){
         const rezult = await response.json();
         localStorage.setItem("user", JSON.stringify(rezult));
+        setUser(localStorage.getItem(rezult));
         navigate("/");
       }else{
         const rezult = await response.json();
@@ -110,12 +113,28 @@ function App() {
     } catch (error) {
       console.log(error.message);
     }
-    
+  }
+
+  const  onLogout = async () =>{
+    console.log(user.accessToken)
+    try {
+      await fetch("http://localhost:3030/users/logout",{
+        method:"GET",
+        headers:{
+          // "X-Authorization": {user.accessToken}
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    localStorage.clear();
+    setUser("");
+    navigate("/");
   }
  
   return (
     <>
-      <Navigation/>
+      <Navigation user={user} onLogout={onLogout}/>
 
       <Routes>
         <Route path="/" element={<Home/>}></Route>

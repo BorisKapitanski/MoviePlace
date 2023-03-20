@@ -24,7 +24,7 @@ export const AddMovie = ({
         <form onSubmit={(e)=>onCreateSubmit(e, createData)}>
             <div className="error">
             <p>Title is required!</p>
-            </div>
+            </div>  
             <div>
                 <label>Title</label>
                 <input type="text" name="title" value={createData.title} onChange={onCreateInputChange} />

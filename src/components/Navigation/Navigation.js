@@ -1,6 +1,9 @@
 import styles from "./navigation.module.css"
 import { Link } from "react-router-dom"
-export const Navigation = () => {
+export const Navigation = ({
+    user,
+    onLogout
+}) => {
     return (
         <header>
             <div className={styles["nav"]}>
@@ -11,10 +14,17 @@ export const Navigation = () => {
                     <ul>
                         <li><Link to={"/"}>Home</Link></li>
                         <li><Link to={"/movies"}>Movies</Link></li>
-                        <li><Link to={"/add-movie"}>Add Movie</Link></li>
-                        <li><Link to={"/login"}>Login</Link></li>
-                        <li><Link to={"/register"}>Register</Link></li>
-                        <li><a href="">Logout</a></li>
+                        {user && <>
+                            <li><Link to={"/add-movie"}>Add Movie</Link></li>
+                            <li><a onClick={onLogout}>Logout</a></li>
+                        </>
+                        }
+                        {!user && <>
+                            <li><Link to={"/login"}>Login</Link></li>
+                            <li><Link to={"/register"}>Register</Link></li>
+                        </>
+                        }
+
                     </ul>
                 </nav>
             </div>
