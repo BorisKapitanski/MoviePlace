@@ -1,0 +1,22 @@
+.comments {
+    align-items: center;
+    background-color: black;
+    text-decoration: none;
+    padding-top: 20px;
+    border-style: outset;
+    border-color: red;
+    padding-right: 40px;
+    padding-left: 20px;
+
+}
+
+.button {
+    font-weight: bold;
+    padding: 0.2em;
+    margin: 0.2em;
+    border: 1px solid white;
+    border-radius: 0.3em;
+    background-color: white;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}

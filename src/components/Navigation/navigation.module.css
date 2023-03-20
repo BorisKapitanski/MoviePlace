@@ -1,0 +1,35 @@
+.logo{
+    text-align: left;
+    margin: auto;
+    font-size: xx-large;
+    margin-bottom: 20px;
+    font-family: fantasy;
+}
+.logo a span {
+    color: red;
+}
+.nav {
+    box-sizing: content-box;
+    align-self: center;
+    border: 20px;
+    border-radius: 0.2em;
+    background-color: black;
+    margin-left: 20%;
+    margin-right: 20%;
+    text-align: right;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    font-size: large;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.nav nav ul li {
+    display: inline-block;
+    text-decoration: none;
+    color: red;
+}
+
+.nav nav ul li:hover {
+    text-decoration: underline;
+    color: white;
+}

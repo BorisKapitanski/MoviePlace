@@ -1,0 +1,19 @@
+footer {
+    box-sizing: content-box;
+    align-self: center;
+    border: 20px;
+    border-radius: 0.2em;
+    background-color: black;
+    margin-left: 240px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    font-size: large;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    position: fixed;
+    bottom: 0;
+    /* Height of the footer*/
+    height: 45px;
+    width: 40%;
+
+}
