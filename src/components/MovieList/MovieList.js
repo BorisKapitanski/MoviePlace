@@ -7,6 +7,7 @@ export const MovieList = ({
     movies,
 }) => {
     const { onDetailsClick } = useContext(Context);
+    
     return (
         <div className={styles["movie-list"]}>
             <h1>All Movies</h1>

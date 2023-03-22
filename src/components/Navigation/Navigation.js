@@ -12,6 +12,7 @@ export const Navigation = ({
                 </div>
                 <nav>
                     <ul>
+
                         <li><Link to={"/"}>Home</Link></li>
                         <li><Link to={"/movies"}>Movies</Link></li>
                         {user && <>
@@ -24,7 +25,7 @@ export const Navigation = ({
                             <li><Link to={"/register"}>Register</Link></li>
                         </>
                         }
-
+                        <span>Welcome, {user ? user.email : "Guest"}!</span>
                     </ul>
                 </nav>
             </div>

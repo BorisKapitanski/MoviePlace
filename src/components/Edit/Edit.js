@@ -5,10 +5,10 @@ import { Context } from "../../context/useContext";
 export const Edit = ({
     onEditSubmit
 }) => {
-    const { movie } = useState(Context);
+    const { movie, formError } = useState(Context);
     console.log(movie)
     const [createData, setCreateData] = useState(movie);
-    
+
     const onCreateInputChange = (e) => {
         setCreateData((oldState) => ({ ...oldState, [e.target.name]: e.target.value }));
     }
@@ -17,9 +17,11 @@ export const Edit = ({
         <div className={styles["add-movie"]}>
             <h3>Edit Movie</h3>
             <form onSubmit={(e) => onEditSubmit(e, createData._id, createData)}>
-                <div className="error">
-                    <p>Title is required!</p>
-                </div>
+                {formError &&
+                    <div className="error">
+                        <p>{formError}</p>
+                    </div>
+                }
                 <div>
                     <label>Title</label>
                     <input type="text" name="title" value={createData.title} onChange={onCreateInputChange} />

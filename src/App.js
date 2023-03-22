@@ -40,7 +40,12 @@ function App() {
 
   const onCreateSubmit = async (e, data) => {
     e.preventDefault();
+    setFormError("");
     console.log(data);
+    const {title,director,year,genre,img, description} = data;
+    if( !title || !director || !year || !genre || !img || !description){
+      return setFormError("All fields are required!");
+    }
     try {
       await services.post(baseUrl, data, user.accessToken);
     } catch (error) {
@@ -62,6 +67,10 @@ function App() {
 
   const onEditSubmit = async (e, movieId, data) => {
     e.preventDefault();
+    const {title,director,year,genre,img, description} = data;
+    if( !title || !director || !year || !genre || !img || !description){
+      return setFormError("All fields are required!");
+    }
     try {
       await services.put(`${baseUrl}/${movieId}`, data, user.accessToken);
     } catch (error) {
