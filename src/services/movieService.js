@@ -1,33 +1,34 @@
 
-async function movieService(method, url, data) {
+async function movieService(method, url, data, token) {
+    let options = {};
     if (method !== "GET") {
-        let options = {};
         options.method = method;
         if (data) {
-            options.header = {
+            options.headers = {
                 "Content-Type": "application/json"
             };
             options.body = JSON.stringify(data);
         }
-        try {
-            const response = await fetch(url, options);
-            const rezult = await response.json();
-            return rezult;
-        } catch (error) {
-            console.log("ERROR", error);
+    }
+    if(token){
+        options.headers ={
+            ...options?.headers,
+            "X-Authorization": token
         }
     }
-    try {
-        const response = await fetch(url);
+        const response = await fetch(url, options);
         let rezult = {};
         if (response.ok && response.status === 204) {
             return rezult
         }
+        
+        if(!response.ok){
+            throw await response.json()
+        }
         rezult = await response.json();
         return rezult;
-    } catch (error) {
-        console.log("ERROR", error)
-    }
+    
+
 
 }
 

@@ -1,11 +1,12 @@
-
+import { Context } from "../../context/useContext";
+import { useContext } from "react";
 import { MovieCard } from "./MovieCard"
 import styles from "./movieList.module.css"
 
 export const MovieList = ({
     movies,
-    onDetailsClick,
 }) => {
+    const { onDetailsClick } = useContext(Context);
     return (
         <div className={styles["movie-list"]}>
             <h1>All Movies</h1>

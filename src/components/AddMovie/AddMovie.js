@@ -9,9 +9,9 @@ export const AddMovie = ({
         director: "",
         year: "",
         genre: "",
-        imageUrl: "",
-        plot: "",
-        comments: [],
+        img: "",
+        description: "",
+        comments:[],
     });
     
     const onCreateInputChange = (e) =>{
@@ -43,11 +43,11 @@ export const AddMovie = ({
             </div>
             <div>
                 <label>Image</label>
-                <input type="text" name="imageUrl" value={createData.imageUrl} onChange={onCreateInputChange} />
+                <input type="text" name="img" value={createData.img} onChange={onCreateInputChange} />
             </div>
             <div>
                 <label>Plot</label>
-                <textarea name="plot" id="plot" cols="21" rows="10" value={createData.plot} onChange={onCreateInputChange} ></textarea>
+                <textarea name="description" id="description" cols="21" rows="10" value={createData.description} onChange={onCreateInputChange} ></textarea>
             </div>
             <div>
                 <input className={styles["button"]} type="submit" value="Add" />

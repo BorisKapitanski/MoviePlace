@@ -1,10 +1,11 @@
 import styles from "./register.module.css";
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { Context } from "../../context/useContext";
 
 export const Register = ({
     onRegister,
-    formError,
 }) => {
+    const {formError} = useContext(Context);
     const [userForm, setUserForm] = useState({
         email: "",
         password: "",

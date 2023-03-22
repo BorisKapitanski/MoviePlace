@@ -16,7 +16,7 @@ export const Navigation = ({
                         <li><Link to={"/movies"}>Movies</Link></li>
                         {user && <>
                             <li><Link to={"/add-movie"}>Add Movie</Link></li>
-                            <li><a onClick={onLogout}>Logout</a></li>
+                            <li><Link onClick={onLogout}>Logout</Link></li>
                         </>
                         }
                         {!user && <>

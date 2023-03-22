@@ -1,12 +1,14 @@
 import styles from "./edit.module.css";
 import { useState } from "react";
+import { Context } from "../../context/useContext";
 
 export const Edit = ({
-    movie,
     onEditSubmit
 }) => {
+    const { movie } = useState(Context);
+    console.log(movie)
     const [createData, setCreateData] = useState(movie);
-
+    
     const onCreateInputChange = (e) => {
         setCreateData((oldState) => ({ ...oldState, [e.target.name]: e.target.value }));
     }
