@@ -15,30 +15,20 @@ export const Details = ({
 }) => {
     const [movie, setMovie] = useState({})
     const [deleteModal, setDeleteModal] = useState(false);
-    const [comments, setComments] = useState([]);
-    const { userId, token } = useContext(Context);
     const {movieId} = useParams();
-    
+    const {userId} = useContext(Context)
     useEffect(()=>{
         services.get(`${baseUrl}/${movieId}`)
           .then(response => setMovie(response));  
     },[]);
-    useEffect(()=>{
-        services.get(`http://localhost:3030/data/comments?where=movieId%3D%22${movieId}%22`)
-        .then(comment =>setComments(comment))
-    },[])
+    
     const onDeleteButton = () => {
         setDeleteModal(true);
     }
     const onCancelClick = () => {
         setDeleteModal(false);
     }
-    const onCommentSubmit = async (e, comment) => {
-        e.preventDefault();
-        const commentWithMovieId = {...comment, movieId}
-        await services.post(`http://localhost:3030/data/comments`, commentWithMovieId, token);
-        setComments(oldComments=> [...oldComments, commentWithMovieId]);
-      }
+   
       
     return (
         <>
@@ -59,20 +49,7 @@ export const Details = ({
                     )}
 
                 </article>
-                {userId && (<Comments onCommentSubmit={onCommentSubmit} movieId={movie._id} />)}
-
-                <div className={styles["comment-list"]}>
-                    <ul>
-                        {comments.map(x =>
-
-                            <li key={x._id}>
-                                <h5>{x.author}</h5>
-                                <p>{x.text}</p>
-                            </li>
-
-                        )}
-                    </ul>
-                </div>
+                <Comments />
             </div>
         </>
 

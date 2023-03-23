@@ -99,7 +99,7 @@ function App() {
       return
     }
     try {
-      const response = await userService.register(userInfo);
+      await userService.register(userInfo);
       navigate("/login");
       
     } catch (error) {

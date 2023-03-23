@@ -7,7 +7,6 @@
     border-color: red;
     padding-right: 40px;
     padding-left: 20px;
-
 }
 
 .button {
@@ -19,4 +18,23 @@
     background-color: white;
     margin-bottom: 20px;
     margin-top: 20px;
+}
+.comment-list {
+    align-items: center;
+    background-color: black;
+    text-decoration: none;
+    padding-top: 20px;
+    border-style: outset;
+    border-color: red;
+    padding-right: 40px;
+    padding-left: 20px;
+}
+.comment-list ul li{
+    text-align: left;
+    background-color: white;
+    border: 2px solid gray;
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    margin-bottom: 10px;
 }
