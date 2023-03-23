@@ -37,29 +37,34 @@ function App() {
       .then(response => setMovie(response))
       .catch(err => console.log(err));
   }
+  const onEditClick = (movieId) => {
+    services.get(`${baseUrl}/${movieId}`)
+      .then(response => setMovie(response))
+      .catch(err => console.log(err));
+  }
 
   const onCreateSubmit = async (e, data) => {
     e.preventDefault();
     setFormError("");
-    console.log(data);
     const {title,director,year,genre,img, description} = data;
     if( !title || !director || !year || !genre || !img || !description){
       return setFormError("All fields are required!");
     }
     try {
-      await services.post(baseUrl, data, user.accessToken);
+      const response = await services.post(baseUrl, data, user.accessToken);
+      setMovies((oldMovies) => [...oldMovies, response]);
+      navigate("/movies");
     } catch (error) {
-      console.log(error)
+      setFormError(error.message)
     }
-    setMovies((oldMovies) => [...oldMovies, data]);
-    navigate("/movies");
+    
   }
 
   const onDeleteClick = async (id) => {
     try {
-      await services.delete(`${baseUrl}/${id}`, user.accessToken);
+      await services.delete(`${baseUrl}/${id}`, null, user.accessToken);
     } catch (error) {
-      console.log(error);
+      setFormError(error.message); // TODO redirect to /404 where error.message
     }
     setMovies(oldMovies => oldMovies.filter(x => x._id !== id));
     navigate("/movies");
@@ -72,12 +77,14 @@ function App() {
       return setFormError("All fields are required!");
     }
     try {
-      await services.put(`${baseUrl}/${movieId}`, data, user.accessToken);
+      const response = await services.put(`${baseUrl}/${movieId}`, data, user.accessToken);
+      setMovies(oldMovies => oldMovies.map(x => x._id === movieId ? x = response : x));
+      setMovie(response);
+      setFormError("")
+      navigate(`/movies/${movieId}`);
     } catch (error) {
-      console.log(error)
+      setFormError(error.message);
     }
-    setMovies(oldMovies => oldMovies.map(x => x._id === movieId ? x = data : x));
-    navigate("/movies");
   }
 
   
@@ -135,6 +142,7 @@ function App() {
     email: user.email,
     userId: user._id,
     onDetailsClick,
+    onEditClick,
     movie,
     formError
 

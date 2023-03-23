@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Comments } from "../Comments/Comments";
 import { DeleteModal } from "./DeleteModal/DeleteModal";
 import { Context } from "../../context/useContext";
@@ -13,14 +13,14 @@ const baseUrl = "http://localhost:3030/data/movies"
 export const Details = ({
     onDeleteClick,
 }) => {
-    const [movie, setMovie] = useState({})
+    // const [movie, setMovie] = useState({})
     const [deleteModal, setDeleteModal] = useState(false);
-    const {movieId} = useParams();
-    const {userId} = useContext(Context)
-    useEffect(()=>{
-        services.get(`${baseUrl}/${movieId}`)
-          .then(response => setMovie(response));  
-    },[]);
+    // const {movieId} = useParams();
+    const {userId, formError, onEditClick, movie} = useContext(Context)
+    // useEffect(()=>{
+    //     services.get(`${baseUrl}/${movieId}`)
+    //       .then(response => setMovie(response));  
+    // },[movieId]);
     
     const onDeleteButton = () => {
         setDeleteModal(true);
@@ -36,6 +36,11 @@ export const Details = ({
             <div className={styles["details"]}>
                 <h3>Details</h3>
                 <article>
+                {formError &&
+                    <div className="error">
+                        <p>{formError}</p>
+                    </div>
+                }
                     <h4>{movie.title}</h4>
                     <img src={movie.img} alt={movie.title} />
                     <h5>{movie.director}, <span>{movie.year}</span></h5>
@@ -43,7 +48,7 @@ export const Details = ({
                     <p>{movie.description}</p>
                     {userId && userId === movie._ownerId && (
                         <>
-                            <button><Link to={`/movies/${movie._id}/edit`}>Edit</Link></button>
+                            <button><Link to={`/movies/${movie._id}/edit`} onClick={()=> onEditClick(movie._id)}>Edit</Link></button>
                             <button onClick={() => onDeleteButton()} >Delete</button>
                         </>
                     )}

@@ -24,6 +24,9 @@ export const Comments = ({
 
     const onCommentSubmit = async (e, comment) => {
         e.preventDefault();
+        if(comment.text === ''){
+            return
+        }
         const commentWithMovieIdandEmail = { ...comment, movieId, author: email }
         const response = await services.post(`http://localhost:3030/data/comments`, commentWithMovieIdandEmail, token);
         setComments(oldComments => [...oldComments, response]);
@@ -32,7 +35,7 @@ export const Comments = ({
         });
     }
 
-
+    console.log(comments)
 
     return (
         <>
@@ -47,7 +50,7 @@ export const Comments = ({
 
 
             <div className={styles["comment-list"]}>
-                {comments !== [] ?
+                {comments.length != 0 ?
                     (<ul>
                         {comments.map(x =>
 
@@ -57,7 +60,8 @@ export const Comments = ({
                             </li>
 
                         )}
-                    </ul>) : (<span>No added comments!</span>)}
+                    </ul>) :
+                    (<span>No added comments.</span>)}
             </div>
         </>
 

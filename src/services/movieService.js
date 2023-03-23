@@ -21,6 +21,9 @@ async function movieService(method, url, data, token) {
         if (response.ok && response.status === 204) {
             return rezult
         }
+        if(url === "http://localhost:3030/users/logout"){
+            return rezult;
+        }
         
         if(!response.ok){
             throw await response.json()
