@@ -3,9 +3,7 @@ import { Context } from "../../context/useContext";
 import styles from "./comments.module.css";
 import services from "../../services/movieService";
 import { useParams } from "react-router-dom";
-export const Comments = ({
-
-}) => {
+export const Comments = () => {
     const { email, token } = useContext(Context);
     const [comment, setComment] = useState({
         text: ""
@@ -16,7 +14,7 @@ export const Comments = ({
     useEffect(() => {
         services.get(`http://localhost:3030/data/comments?where=movieId%3D%22${movieId}%22`)
             .then(response => setComments(response))
-    }, [])
+    }, [movieId])
 
     const onTextChange = (e) => {
         setComment(text => ({ ...text, [e.target.name]: e.target.value }))
@@ -34,9 +32,7 @@ export const Comments = ({
             text: ""
         });
     }
-
-    console.log(comments)
-
+    
     return (
         <>
 
@@ -50,7 +46,7 @@ export const Comments = ({
 
 
             <div className={styles["comment-list"]}>
-                {comments.length != 0 ?
+                {comments.length !== 0 ?
                     (<ul>
                         {comments.map(x =>
 

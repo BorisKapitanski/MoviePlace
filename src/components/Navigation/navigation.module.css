@@ -27,6 +27,7 @@
     display: inline-block;
     text-decoration: none;
     color: red;
+    margin-right: 10px;
 }
 
 .nav nav ul li:hover {

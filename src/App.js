@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { Routes, Route, useNavigate, } from "react-router-dom"
+
 import './App.css';
 import { AddMovie } from "./components/AddMovie/AddMovie";
 import { Details } from "./components/Details/Details";
@@ -10,7 +11,10 @@ import { Login } from "./components/Login/Login";
 import { MovieList } from "./components/MovieList/MovieList";
 import { Navigation } from './components/Navigation/Navigation';
 import { Register } from "./components/Register/Register";
+import { Error } from "./components/ErrorPage/Error";
+
 import services from "./services/movieService";
+import { createFormVlaidator, registerFormValidator, editFormVlaidator } from "./utils/formValidator";
 import * as userService from "./services/userService";
 import { Context } from "./context/useContext";
 
@@ -24,47 +28,62 @@ function App() {
 
   const navigate = useNavigate();
   useContext(Context);
+
   useEffect(() => {
     services.get(baseUrl)
       .then(response => Object.values(response))
       .then(rezult => setMovies(rezult))
-      .catch((err) => console.log(err));
-  }, []);
+      .catch(err => {
+        console.log(err.message)
+        navigate("/404")
+      });
+  }, [navigate]);
 
 
   const onDetailsClick = (movieId) => {
     services.get(`${baseUrl}/${movieId}`)
       .then(response => setMovie(response))
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err.message)
+        navigate("/404")
+      });
   }
   const onEditClick = (movieId) => {
     services.get(`${baseUrl}/${movieId}`)
       .then(response => setMovie(response))
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err.message)
+        navigate("/404")
+      });
   }
 
   const onCreateSubmit = async (e, data) => {
     e.preventDefault();
     setFormError("");
-    const {title,director,year,genre,img, description} = data;
-    if( !title || !director || !year || !genre || !img || !description){
-      return setFormError("All fields are required!");
+
+    const rezult = createFormVlaidator(data);
+
+    if (typeof rezult === String) {
+      return setFormError(rezult);
     }
+
     try {
       const response = await services.post(baseUrl, data, user.accessToken);
       setMovies((oldMovies) => [...oldMovies, response]);
+      setFormError("");
       navigate("/movies");
     } catch (error) {
-      setFormError(error.message)
+      console.log(error.message);
+      navigate("/404");
     }
-    
   }
 
   const onDeleteClick = async (id) => {
     try {
       await services.delete(`${baseUrl}/${id}`, null, user.accessToken);
     } catch (error) {
-      setFormError(error.message); // TODO redirect to /404 where error.message
+      console.log(error.message);
+      navigate("/404");
     }
     setMovies(oldMovies => oldMovies.filter(x => x._id !== id));
     navigate("/movies");
@@ -72,10 +91,14 @@ function App() {
 
   const onEditSubmit = async (e, movieId, data) => {
     e.preventDefault();
-    const {title,director,year,genre,img, description} = data;
-    if( !title || !director || !year || !genre || !img || !description){
-      return setFormError("All fields are required!");
+    setFormError("");
+
+    const rezult = editFormVlaidator(data);
+
+    if (typeof rezult === String) {
+      return setFormError(rezult);
     }
+
     try {
       const response = await services.put(`${baseUrl}/${movieId}`, data, user.accessToken);
       setMovies(oldMovies => oldMovies.map(x => x._id === movieId ? x = response : x));
@@ -83,34 +106,32 @@ function App() {
       setFormError("")
       navigate(`/movies/${movieId}`);
     } catch (error) {
-      setFormError(error.message);
+      console.log(error.message);
+      navigate("/404");
     }
   }
 
-  
+
 
   const onRegister = async (e, userForm) => {
     e.preventDefault();
-    const { repeatPassword, ...userInfo } = userForm
+
     setFormError("");
-    if (userForm.password !== userForm.repeatPassword) {
-      setFormError("Passwords must match!");
-      return
+
+    const rezult = registerFormValidator(userForm);
+
+    if (typeof rezult === String) {
+      return setFormError(rezult);
     }
-    if (userForm.password.length < 3 || userForm.password.length > 10) {
-      setFormError("Password must be atleast 3 characters long!")
-      return
-    }
-    if (!userForm.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)) {
-      setFormError("Invalid email!");
-      return
-    }
+
+    const { repeatPassword, ...userInfo } = userForm
+
     try {
       await userService.register(userInfo);
       navigate("/login");
-      
     } catch (error) {
-      setFormError(error.message)
+      console.log(error.message);
+      navigate("/404");
     }
   }
 
@@ -122,21 +143,23 @@ function App() {
       const response = await userService.login(userForm)
       setUser(response);
       navigate("/");
-
     } catch (error) {
-      setFormError(error.message)
+      console.log(error.message);
+      navigate("/404");
     }
   }
 
   const onLogout = async () => {
     try {
       await userService.logout(user.accessToken);
+      setUser("");
+      navigate("/");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
+      navigate("/404");
     }
-    setUser("");
-    navigate("/");
   }
+
   const appContext = {
     token: user.accessToken,
     email: user.email,
@@ -144,10 +167,12 @@ function App() {
     onDetailsClick,
     onEditClick,
     movie,
-    formError
+    formError,
+  };
 
-  }
-  
+  const isOwner = user._id === movie._ownerId ? true : false;
+  const isUser = user ? true : false;
+
   return (
     <>
       <Context.Provider value={appContext}>
@@ -158,11 +183,10 @@ function App() {
           <Route path="/movies" element={<MovieList movies={movies} />}></Route>
           <Route path="/register" element={<Register onRegister={onRegister} />}></Route>
           <Route path="/login" element={<Login onLogin={onLogin} />}></Route>
-          <Route path="/add-movie" element={<AddMovie onCreateSubmit={onCreateSubmit} />}></Route>
-          <Route path="/movies/:movieId" element={<Details
-            onDeleteClick={onDeleteClick}
-          />}></Route>
-          <Route path="/movies/:movieId/edit" element={<Edit onEditSubmit={onEditSubmit} />}></Route>
+          <Route path="/add-movie" element={isUser ? <AddMovie onCreateSubmit={onCreateSubmit} /> : <Error />}></Route>
+          <Route path="/movies/:movieId" element={<Details onDeleteClick={onDeleteClick} />}></Route>
+          <Route path="/movies/:movieId/edit" element={isUser && isOwner ? <Edit onEditSubmit={onEditSubmit} /> : <Error />}></Route>
+          <Route path="/404" element={<Error />}></Route>
         </Routes>
       </Context.Provider>
 

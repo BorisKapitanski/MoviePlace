@@ -1,0 +1,10 @@
+.error-page {
+    background-color: black;
+    color: red;
+    height: auto;
+    width: auto;
+    font-size: xx-large;
+    border-style: outset;
+    border-color: red;
+    margin-top: 150px;
+}
