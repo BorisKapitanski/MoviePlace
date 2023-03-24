@@ -17,6 +17,7 @@ import services from "./services/movieService";
 import { createFormVlaidator, registerFormValidator, editFormVlaidator } from "./utils/formValidator";
 import * as userService from "./services/userService";
 import { Context } from "./context/useContext";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 const baseUrl = "http://localhost:3030/data/movies"
 
@@ -24,7 +25,7 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [movie, setMovie] = useState({});
   const [formError, setFormError] = useState("");
-  const [user, setUser] = useState('');
+  const [user, setUser] = useLocalStorage("auth", "");
 
   const navigate = useNavigate();
   useContext(Context);
@@ -181,8 +182,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/movies" element={<MovieList movies={movies} />}></Route>
-          <Route path="/register" element={<Register onRegister={onRegister} />}></Route>
-          <Route path="/login" element={<Login onLogin={onLogin} />}></Route>
+          <Route path="/register" element={!isUser ? <Register onRegister={onRegister} /> : <Error/>}></Route>
+          <Route path="/login" element={!isUser ? <Login onLogin={onLogin} /> : <Error/>}></Route>
           <Route path="/add-movie" element={isUser ? <AddMovie onCreateSubmit={onCreateSubmit} /> : <Error />}></Route>
           <Route path="/movies/:movieId" element={<Details onDeleteClick={onDeleteClick} />}></Route>
           <Route path="/movies/:movieId/edit" element={isUser && isOwner ? <Edit onEditSubmit={onEditSubmit} /> : <Error />}></Route>
