@@ -1,16 +1,35 @@
 import styles from "./edit.module.css";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Context } from "../../context/useContext";
+import services from "../../services/movieService";
+import { useNavigate, useParams } from "react-router-dom";
 
-
+const baseUrl = "http://localhost:3030/data/movies"
 
 export const Edit = ({
     onEditSubmit
 }) => {
-    const {formError, movie } = useContext(Context);
+    const navigate = useNavigate();
+    const { movieId } = useParams();
+    const { formError, userId } = useContext(Context);
+    const [editedData, setEditedData] = useState({});
+    console.log(editedData);
+    useEffect(() => {
+        services.get(`${baseUrl}/${movieId}`)
+            .then(response => {
+                if (userId !== response._ownerId) {
+                    return navigate("/404");
+                }
+                setEditedData({ ...response });
+            })
+            .catch(err => {
+                console.log(err.message);
+                navigate("/404");
+            })
+    }, [movieId, navigate, userId]);
 
-    const [editedData, setEditedData] = useState(movie);
-   
+
+
     const onEditInputChange = (e) => {
         setEditedData((oldState) => ({ ...oldState, [e.target.name]: e.target.value }));
     }
@@ -18,7 +37,7 @@ export const Edit = ({
     return (
         <div className={styles["add-movie"]}>
             <h3>Edit Movie</h3>
-            <form onSubmit={(e) => onEditSubmit(e, movie._id, editedData)}>
+            <form onSubmit={(e) => onEditSubmit(e, editedData._id, editedData)}>
                 {formError &&
                     <div className="error">
                         <p>{formError}</p>

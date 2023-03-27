@@ -23,7 +23,6 @@ const baseUrl = "http://localhost:3030/data/movies"
 
 function App() {
   const [movies, setMovies] = useState([]);
-  const [movie, setMovie] = useState({});
   const [formError, setFormError] = useState("");
   const [user, setUser] = useLocalStorage("auth", "");
 
@@ -40,31 +39,13 @@ function App() {
       });
   }, [navigate]);
 
-
-  const onDetailsClick = (movieId) => {
-    services.get(`${baseUrl}/${movieId}`)
-      .then(response => setMovie(response))
-      .catch(err => {
-        console.log(err.message)
-        navigate("/404")
-      });
-  }
-  const onEditClick = (movieId) => {
-    services.get(`${baseUrl}/${movieId}`)
-      .then(response => setMovie(response))
-      .catch(err => {
-        console.log(err.message)
-        navigate("/404")
-      });
-  }
-
   const onCreateSubmit = async (e, data) => {
     e.preventDefault();
     setFormError("");
 
     const rezult = createFormVlaidator(data);
 
-    if (typeof rezult === String) {
+    if (typeof rezult === "string") {
       return setFormError(rezult);
     }
 
@@ -95,15 +76,14 @@ function App() {
     setFormError("");
 
     const rezult = editFormVlaidator(data);
-
-    if (typeof rezult === String) {
+   
+    if (typeof rezult === "string") {
       return setFormError(rezult);
     }
 
     try {
       const response = await services.put(`${baseUrl}/${movieId}`, data, user.accessToken);
       setMovies(oldMovies => oldMovies.map(x => x._id === movieId ? x = response : x));
-      setMovie(response);
       setFormError("")
       navigate(`/movies/${movieId}`);
     } catch (error) {
@@ -165,13 +145,9 @@ function App() {
     token: user.accessToken,
     email: user.email,
     userId: user._id,
-    onDetailsClick,
-    onEditClick,
-    movie,
     formError,
   };
 
-  const isOwner = user._id === movie._ownerId ? true : false;
   const isUser = user ? true : false;
 
   return (
@@ -186,8 +162,9 @@ function App() {
           <Route path="/login" element={!isUser ? <Login onLogin={onLogin} /> : <Error/>}></Route>
           <Route path="/add-movie" element={isUser ? <AddMovie onCreateSubmit={onCreateSubmit} /> : <Error />}></Route>
           <Route path="/movies/:movieId" element={<Details onDeleteClick={onDeleteClick} />}></Route>
-          <Route path="/movies/:movieId/edit" element={isUser && isOwner ? <Edit onEditSubmit={onEditSubmit} /> : <Error />}></Route>
+          <Route path="/movies/:movieId/edit" element={isUser ? <Edit onEditSubmit={onEditSubmit} /> : <Error />}></Route>
           <Route path="/404" element={<Error />}></Route>
+          <Route path="*" element={<Error />}></Route>
         </Routes>
       </Context.Provider>
 
