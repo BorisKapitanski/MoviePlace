@@ -13,7 +13,7 @@ export const Edit = ({
     const { movieId } = useParams();
     const { formError, userId } = useContext(Context);
     const [editedData, setEditedData] = useState({});
-    console.log(editedData);
+    
     useEffect(() => {
         services.get(`${baseUrl}/${movieId}`)
             .then(response => {

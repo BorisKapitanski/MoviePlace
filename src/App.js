@@ -19,13 +19,13 @@ import * as userService from "./services/userService";
 import { Context } from "./context/useContext";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 
+
 const baseUrl = "http://localhost:3030/data/movies"
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [formError, setFormError] = useState("");
   const [user, setUser] = useLocalStorage("auth", "");
-
   const navigate = useNavigate();
   useContext(Context);
 
@@ -153,11 +153,11 @@ function App() {
   return (
     <>
       <Context.Provider value={appContext}>
-        <Navigation user={user} onLogout={onLogout} />
+        <Navigation user={user} onLogout={onLogout}/>
 
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/movies" element={<MovieList movies={movies} />}></Route>
+          <Route path="/movies" element={<MovieList movies={movies}/>}></Route>
           <Route path="/register" element={!isUser ? <Register onRegister={onRegister} /> : <Error/>}></Route>
           <Route path="/login" element={!isUser ? <Login onLogin={onLogin} /> : <Error/>}></Route>
           <Route path="/add-movie" element={isUser ? <AddMovie onCreateSubmit={onCreateSubmit} /> : <Error />}></Route>
