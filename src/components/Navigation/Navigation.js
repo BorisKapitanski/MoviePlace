@@ -1,15 +1,25 @@
-import styles from "./navigation.module.css"
-import { Link } from "react-router-dom"
+import styles from "./navigation.module.css";
+
+import { Link } from "react-router-dom";
+
+
+import { Wheather } from "../Wheather/Wheather";
 export const Navigation = ({
     user,
     onLogout,
 }) => {
+
+
     return (
         <header>
             <div className={styles["nav"]}>
                 <div className={styles["logo"]}>
                     <Link to={"/"}>Movie <span>Place</span></Link>
+                    
                 </div>
+                
+                <Wheather />
+
                 <nav>
                     <ul>
 
@@ -26,9 +36,11 @@ export const Navigation = ({
                         </>
                         }
                         <span>Welcome, {user ? user.email : "Guest"}!</span>
+
                     </ul>
                 </nav>
             </div>
+            
         </header>
     )
 }
