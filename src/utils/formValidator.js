@@ -1,4 +1,5 @@
 
+
 export const registerFormValidator = (data) =>{
     if (data.password !== data.repeatPassword) {
         return "Passwords must match!"
@@ -12,13 +13,14 @@ export const registerFormValidator = (data) =>{
       return data
 }
 
-export const createFormVlaidator = (data) =>{
+export const createFormVlaidator = async (data) =>{
 
     const {title,director,year,genre,img, description} = data
 
     if( !title || !director || !year || !genre || !img || !description){
         return "All fields are required!";
     }
+    
     return data
 }
 

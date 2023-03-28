@@ -12,7 +12,14 @@ export const Edit = ({
     const navigate = useNavigate();
     const { movieId } = useParams();
     const { formError, userId } = useContext(Context);
-    const [editedData, setEditedData] = useState({});
+    const [editedData, setEditedData] = useState({
+        title: "",
+        director: "",
+        year: "",
+        genre: "",
+        img: "",
+        description: "",
+    });
     
     useEffect(() => {
         services.get(`${baseUrl}/${movieId}`)
