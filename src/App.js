@@ -37,7 +37,6 @@ function App() {
       .then(rezult => setMovies(rezult))
       .catch(err => {
         console.log(err.message)
-        navigate("/404")
       });
   }, [navigate]);
 
@@ -58,7 +57,7 @@ function App() {
       navigate("/movies");
     } catch (error) {
       console.log(error.message);
-      navigate("/404");
+      
     }
   }
 
@@ -67,7 +66,7 @@ function App() {
       await services.delete(`${baseUrl}/${id}`, null, user.accessToken);
     } catch (error) {
       console.log(error.message);
-      navigate("/404");
+      
     }
     setMovies(oldMovies => oldMovies.filter(x => x._id !== id));
     navigate("/movies");
@@ -90,7 +89,7 @@ function App() {
       navigate(`/movies/${movieId}`);
     } catch (error) {
       console.log(error.message);
-      navigate("/404");
+      setFormError(error.message);
     }
   }
 
@@ -103,7 +102,7 @@ function App() {
 
     const rezult = registerFormValidator(userForm);
 
-    if (typeof rezult === String) {
+    if (typeof rezult === "string") {
       return setFormError(rezult);
     }
 
@@ -114,7 +113,7 @@ function App() {
       navigate("/login");
     } catch (error) {
       console.log(error.message);
-      navigate("/404");
+      setFormError(error.message);
     }
   }
 
@@ -128,7 +127,7 @@ function App() {
       navigate("/");
     } catch (error) {
       console.log(error.message);
-      navigate("/404");
+      setFormError(error.message);
     }
   }
 
@@ -139,7 +138,6 @@ function App() {
       navigate("/");
     } catch (error) {
       console.log(error.message);
-      navigate("/404");
     }
   }
 

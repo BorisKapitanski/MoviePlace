@@ -13,7 +13,7 @@ export const registerFormValidator = (data) =>{
       return data
 }
 
-export const createFormVlaidator = async (data) =>{
+export const createFormVlaidator = (data) =>{
 
     const {title,director,year,genre,img, description} = data
 
