@@ -51,7 +51,7 @@ export const Comments = () => {
                         {comments.map(x =>
 
                             <li key={x._id}>
-                                <h5>{x.author}</h5>
+                                <h5>Author: {x.author}</h5>
                                 <p>{x.text}</p>
                             </li>
 

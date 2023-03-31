@@ -14,7 +14,7 @@ export const Wheather = () => {
 
     return (
         <ul className={styles["wheather"]}>
-            <img src={wheather ? wheather.current.condition.icon : ''}></img>
+            <img src={wheather ? wheather.current.condition.icon : ''} alt={wheather ? wheather.current.condition.text : ''}/>
             <li>{wheather ? wheather.current.condition.text : ''}</li>
             <li>{wheather ? wheather.location.name : ''}, {wheather ? wheather.location.country : ''}</li>
             <li>{wheather ? wheather.location.localtime.split(" ")[0] : ''}</li>

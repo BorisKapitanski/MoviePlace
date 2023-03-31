@@ -12,7 +12,7 @@ import { MovieList } from "./components/MovieList/MovieList";
 import { Navigation } from './components/Navigation/Navigation';
 import { Register } from "./components/Register/Register";
 import { Error } from "./components/ErrorPage/Error";
-import { Wheather } from "./components/Wheather/Wheather";
+
 
 
 import services from "./services/movieService";
